@@ -31,7 +31,7 @@
                         {{(it.confirmed ? 'confirmed' : 'unconfirmed')}}
                         </p>
                         <p ng-show="it.isgroup" class='memberslist'>
-                            <b>members : </b>{{it.members}}
+                           {{it.membersname}}
                         </p>
                     </div>
 
@@ -107,8 +107,8 @@
             <img  ng-show="ul.selected.isgroup" src="{{ul.selected.image}}" class="avatar"/>
             <span ng-show="ul.selected.isgroup">{{ul.selected.name}}</span>
 
-            <span ng-show="ul.selected.isgroup" class='memberslist'>
-                {{ul.selected.members}}</span>
+            <span style="width: 400px" ng-show="ul.selected.isgroup" class='memberslist'>
+                {{ul.selected.membersname}}</span>
 
         <div style="float: right" ng-controller="AddContactCtrl as ctr" layout="column" ng-cloak>
 

@@ -127,9 +127,8 @@
 
         function loadContacts(){
 
-            var user = $scope.data.currentUser;
+            authenticService.requestAllContacts.get({}).$promise.then(function(res){
 
-            authenticService.requestAllContacts.get({ id: user._id}).$promise.then(function(res){
 
                 authenticService.setAllContacts(res.users);
                 var contacts = authenticService.getAllContacts();

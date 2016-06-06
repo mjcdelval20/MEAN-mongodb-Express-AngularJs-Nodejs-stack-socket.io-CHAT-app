@@ -27,7 +27,6 @@
             var converUser = $scope.data.selectedUser; //contact or group currently active
             var currentUser = authenticService.getCurrentUser(); // user with session active
 
-            console.log(converUser);
             if(self.asyncContacts.length == 1 && !converUser.isgroup){
 
                 var selectedContact = self.asyncContacts[0]; // contact selected in search box
@@ -37,23 +36,14 @@
                     if (currentUser._id == converUser.gotrequest){
 
                         converUser.idi = converUser.requestby;
-                        converUser.namei = converUser.namereq;
 
-                    } else {
-                        converUser.idi = converUser.gotrequest;
-                        converUser.namei = converUser.name;
-
-                    }
+                    } else { converUser.idi = converUser.gotrequest }
 
                     if (currentUser._id == selectedContact.gotrequest){
 
                         selectedContact.idi = selectedContact.requestby;
-                        selectedContact.namei = selectedContact.namereq
 
-                    }else {
-                        selectedContact.idi = selectedContact.gotrequest;
-                        selectedContact.namei = selectedContact.name;
-                    }
+                    }else { selectedContact.idi = selectedContact.gotrequest }
 
                     var newContact = {
 
@@ -66,7 +56,6 @@
                         requestby : null,
                         userid : null,
                         members: [currentUser._id, converUser._id, selectedContact._id],
-                        membersname : currentUser.name + ', ' + converUser.namei + ', ' + selectedContact.namei,
                         confirmed : true,
                         ids : [currentUser._id, converUser.idi, selectedContact.idi]
 
@@ -76,11 +65,11 @@
 
                         var contact = res.conv;
 
-                        //contact._lowername = contact.name.toLowerCase();
-                        contact._lowername = contact.name ;
+                        contact._lowername = contact.name.toLowerCase();
 
                         $scope.data.currentUser.conversations.push(contact);
                         authenticService.setCurrentUser($scope.data.currentUser);
+                        authenticService.setcurrentforGroupContacts().push(contact);
 
                         //apply filter
 
@@ -98,35 +87,21 @@
                 if (currentUser._id == selectedContact.gotrequest){
 
                     selectedContact.idi = selectedContact.requestby;
-                    //selectedContact.namei = selectedContact.namereq;
 
-                } else {
-                    selectedContact.idi = selectedContact.gotrequest;
-                    //selectedContact.namei = selectedContact.name;
-                }
-
+                } else { selectedContact.idi = selectedContact.gotrequest }
 
                 var infoContact = {
 
                     members : selectedContact._id,
-                    membersname : converUser.membersname + ', ' + selectedContact.name ,
                     ids : [selectedContact.idi],
                     conv : converUser._id
 
                 };
 
-
                 authenticService.addToConv.post(infoContact, function (res, headers) {
 
                     if(res.success){
-                        converUser.membersname = converUser.membersname + ', ' + selectedContact.name;
-                        var currentGroupContacts = authenticService.getcurrentforGroupContacts();
-
-                        console.log(currentGroupContacts);
-
-                        var index = currentGroupContacts.map(function(e) { return e._id; }).indexOf(selectedContact._id);
-
-                        currentGroupContacts.splice(index, 1);
+                        converUser.members = converUser.members + ', ' + selectedContact._id;
                     }
                     // remove contacted added to list group contact
 
@@ -144,7 +119,7 @@
 
             cachedQuery = criteria;
 
-
+            console.log(currentContacts);
             //return cachedQuery ? self.allContacts.filter(createFilterFor(cachedQuery)) : [];
             return cachedQuery ? currentContacts.filter(createFilterFor(cachedQuery)) : [];
             //return cachedQuery ? self.allContacts : [];
@@ -190,6 +165,8 @@
                 else {
                     c._lowername = c.name;
                 }
+
+
 
                 return c;
             });

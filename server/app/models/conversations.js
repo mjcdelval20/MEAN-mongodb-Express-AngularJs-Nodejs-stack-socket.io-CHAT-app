@@ -33,6 +33,9 @@ var ConvSchema = new Schema({
         type : String
     },
     members : {
+        type : []
+    },
+    membersname : {
         type : String
     },
     chats : {

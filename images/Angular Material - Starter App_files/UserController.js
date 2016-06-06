@@ -18,6 +18,8 @@
   function UserController( userService, authenticService, amazonurl, $scope, $mdSidenav, $mdBottomSheet, $log, $state, $http) {
     var self = this;
 
+
+
     self.selected     = null;
     self.users        = [ ];
     self.selectUser   = selectUser;
@@ -138,8 +140,6 @@
           self.selected = $scope.data.currentUser.conversations[0];
           $scope.data.selectedUser = self.selected;
           //loadAllContacts();
-
-
       }
 
       function logout(){
@@ -184,10 +184,8 @@
      */
     function selectUser ( user ) {
 
-
-
       self.selected = angular.isNumber(user) ? $scope.users[user] : user;
-        console.log(self.selected);
+        //console.log(self.selected);
         $scope.data.selectedUser = self.selected;
 
         var currentGroupContacts = angular.copy(authenticService.getcurrentforGroupContactsStatic());
@@ -207,12 +205,14 @@
 
                 if(currentGroupContacts[i]._id == members[j]){
 
+                    console.log(currentGroupContacts[i]);
                     currentGroupContacts.splice(i, 1);
+
 
                 }
               }
           }
-          authenticService.setcurrentforGroupContacts(currentGroupContacts);
+            authenticService.setcurrentforGroupContacts(currentGroupContacts);
       }
 
     /**
@@ -247,11 +247,7 @@
             $mdBottomSheet.hide(action);
           };
         }
-
-
     }
-
-
 
   }
 

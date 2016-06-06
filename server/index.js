@@ -125,10 +125,12 @@ apiRoutes.post('/authenticate', function(req, res){
 
 });
 
-apiRoutes.get('/getallcontacts' ,function(req, res){
+apiRoutes.get('/getallcontacts/:id' ,function(req, res){
 
+    console.log('print params');
+    console.log(req.params.id);
 
-    User.find({}, 'name image', function(err, users){
+    User.find({ _id : {$ne: req.params.id }}, 'name image', function(err, users){
 
         if(err) throw err;
 
@@ -154,6 +156,7 @@ apiRoutes.post('/createconv', function(req, res){
             requestby : req.body.requestby,
             gotrequest : req.body.gotrequest,
             members : req.body.members,
+            membersname : req.body.membersname,
             confirmed : req.body.confirmed
 
         });
@@ -194,6 +197,45 @@ apiRoutes.post('/createconv', function(req, res){
         });
 });
 
+apiRoutes.post('/addtoconv', function(req, res){
+
+
+    console.log(req.body.ids);
+    User.update(
+
+        { _id : { $in: req.body.ids}},
+        {
+            $addToSet : {"conversations" : req.body.conv}
+        },
+
+        function(err, user){
+
+
+            if(err) { return console.log(err)}
+
+            else if (user.nModified !== 0){
+
+                Conversation.update(
+                    { _id : { $in: req.body.conv}},
+
+                    {
+                        $addToSet : {"members" : req.body.members},
+                        $set : {"membersname" : req.body.membersname}
+                    },
+                    function(){
+
+                        res.json({success: true, msg: 'Successful added conversation'});
+
+                    }
+                );
+            }
+            else {
+                res.json({success : false, msg : "Failed to add, It might be already added"})
+            }
+        }
+    )
+
+});
 // connect the api routes under /api/*
 app.use('/api', apiRoutes);
 

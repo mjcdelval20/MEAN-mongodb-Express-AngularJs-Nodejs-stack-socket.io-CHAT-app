@@ -56,7 +56,7 @@
                 },
 
                 checkLoggedIn : checkLoggedIn,
-                requestAllContacts : $resource('http://localhost:3000/api/getallcontacts/:id', {id:'@id'},{
+                requestAllContacts : $resource('http://localhost:3000/api/getallcontacts', {},{
 
                     'get': {
 
