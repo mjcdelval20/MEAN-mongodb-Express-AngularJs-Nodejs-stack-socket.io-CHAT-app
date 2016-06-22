@@ -17,7 +17,7 @@
             }
 
             return {
-                register : $resource('http://localhost:3000/api/signup',{}, {
+                register : $resource('./api/signup',{}, {
 
                     'save': {
                         method: 'POST'
@@ -25,20 +25,20 @@
 
                 }),
 
-                login : $resource('http://localhost:3000/api/authenticate',{}, {
+                login : $resource('./api/authenticate',{}, {
 
                     'try': {
                         method: 'POST'
                     }
 
                 }),
-                acceptConv : $resource('http://localhost:3000/api/acceptconv',{}, {
+                acceptConv : $resource('./api/acceptconv',{}, {
                     'save': {
                         method: 'POST'
                     }
 
                 }),
-                sendMsg : $resource('http://localhost:3000/api/sendmessage', {}, {
+                sendMsg : $resource('./api/sendmessage', {}, {
 
                     'save': {
 
@@ -69,7 +69,7 @@
                 },
 
                 checkLoggedIn : checkLoggedIn,
-                requestAllContacts : $resource('http://localhost:3000/api/getallcontacts/:id', {id:'@id'},{
+                requestAllContacts : $resource('./api/getallcontacts/:id', {id:'@id'},{
 
                     'get': {
 
@@ -77,14 +77,14 @@
                     }
 
                 }),
-                createConversation : $resource('http://localhost:3000/api/createconv', {}, {
+                createConversation : $resource('./api/createconv', {}, {
 
                     'post' : {
 
                         method: 'POST'
                     }
                 }),
-                addToConv : $resource('http://localhost:3000/api/addtoconv', {}, {
+                addToConv : $resource('./api/addtoconv', {}, {
 
                     'post' : {
 

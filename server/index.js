@@ -15,6 +15,8 @@ var express = require('express'),
 //var User = mongoose.model('myuser', userSchema);
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 app.use(cors());
 app.use(cors({
@@ -22,12 +24,15 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.static(__dirname + './public'));
+app.use(express.static(__dirname + '/client/app'));
 
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+console.log(__dirname);
 
-http.listen(8080, "127.0.0.1");
+
+
+
+//server.listen(app.get('port'), function(){});
+//server.listen(8080);
 
 var users = {};
 
@@ -152,13 +157,13 @@ app.use(passport.initialize());
 app.use(function(req,res, next){
 
     if(req.method=='OPTIONS'){
-        res.header("Access-Control-Allow-Origin", "http://localhost:63342");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-        res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        //res.header("Access-Control-Allow-Origin", "*");
+        //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        //res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
 
         res.status(204).end();
     }else{
-        res.header("Access-Control-Allow-Origin", "http://localhost:63342");
+        //res.header("Access-Control-Allow-Origin", "*");
         next();
     }
     //res.header("Access-Control-Allow-Origin", "*");
@@ -423,7 +428,7 @@ apiRoutes.post('/sendmessage', function(req, res){
 // connect the api routes under /api/*
 app.use('/api', apiRoutes);
 
-app.listen(port, function(){
+server.listen(port, function(){
 
     console.log('Started Server: http://localhost:' + port);
 });

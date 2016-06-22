@@ -1,6 +1,6 @@
 
     angular.module('users')
-        .factory('socketio', function ($rootScope) {
+        .factory('socketio', function ($rootScope, $location) {
         //var socket = io.connect('http://localhost:8080');
 
             var socket;
@@ -11,13 +11,14 @@
             //    //path: '/socket.io-client'
             //
             //});
-
+            console.log($location);
             function initSocket(){
 
                 console.log('initsocket executed');
-                socket = io('http://localhost:8080', {
+                socket = io.connect('', {
                     // Send auth token on connection, you will need to DI the Auth service above
                     // 'query': 'token=' + Auth.getToken(),
+
                     'force new connection': true
                     //path: '/socket.io-client'
 
