@@ -1,0 +1,187 @@
+
+<!-- START Left side of the chat, where contacts are showing off  -->
+
+<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+            md-component-id="left"
+            ng-click="" aria-label="Show User List"
+            md-is-locked-open="$mdMedia('gt-sm')" xmlns="http://www.w3.org/1999/html">
+
+    <md-toolbar class="md-whiteframe-z1">
+        <h3>Contacts</h3>
+    </md-toolbar>
+
+    <md-input-container style="margin-bottom: 0" class="">
+        <label>Search</label>
+        <input ng-model="search">
+    </md-input-container>
+
+    <md-content>
+        <md-list>
+
+            <md-list-item style="line-height: 0" ng-click="ul.selectUser(it); ul.toggleList()" ng-class="{'selected' : it === ul.selected }"
+                          ng-repeat="it in data.currentUser.conversations | filter: search">
+
+                    <img ng-show="!it.isgroup" src="{{it.requestby == data.currentUser._id ? it.image : it.imagereq }}" class="avatar"/>
+                    <img ng-show="it.isgroup" src="{{it.image}}" class="avatar"/>
+
+                    <div class="md-list-item-text compact">
+                        <p> {{it.requestby == data.currentUser._id ? it.name : it.namereq }}</p>
+                        <p ng-show="it.isgroup">{{it.name}}</p>
+                        <p ng-show="!it.isgroup" ng-class="(it.confirmed ? 'confirmed' : 'unconfirmed')">
+                        {{(it.confirmed ? 'confirmed' : 'unconfirmed')}}
+                        </p>
+                        <p ng-show="it.isgroup" class='memberslist'>
+                           {{it.membersname}}
+                        </p>
+
+                        <md-button ng-show="!it.confirmed && it.requestby == data.currentUser._id" class="requestSent">Request Sent</md-button>
+                        <md-button ng-click="ul.userAccepted(it)" ng-show="!it.confirmed && it.requestby !== data.currentUser._id" class="btnAccept">accept</md-button>
+                        <md-button ng-show="!it.isgroup && it.confirmed" class="btnDelete" >delete</md-button>
+                        <md-button ng-show="!it.isgroup && !it.confirmed" class="btnDelete" >delete request</md-button>
+                        <md-button ng-show="it.isgroup" class="btnDelete">delete/leave</md-button>
+                    </div>
+
+            </md-list-item>
+
+        </md-list>
+    </md-content>
+
+</md-sidenav>
+
+<!-- END Left side of the chat, where contacts are showing off  -->
+
+<!-- START Right side or main content area  -->
+
+<div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
+
+    <!-- START Top menu bar, where search people is  -->
+
+    <md-toolbar ng-controller="ContactChipDemoCtrl as ctrl" layout="row" class="md-whiteframe-z1">
+
+        <md-button id="main" class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
+            <md-icon md-svg-icon="menu" ></md-icon>
+        </md-button>
+
+        <div class="md-toolbar-tools">
+
+            <div style="float: left" layout="column" ng-cloak>
+                <md-content style="background-color: inherit; color: #FFFFFF;" class="md-chips autocomplete" layout="column">
+
+                    <md-contact-chips
+
+                            ng-model="ctrl.asyncContacts"
+                            md-contacts="ctrl.delayedQuerySearch($query)"
+                            md-contact-name="name"
+                            md-contact-image="image"
+                            md-require-match="true"
+                            md-highlight-flags="i"
+                            md-max-chips="1"
+                            filter-selected="ctrl.filterSelected"
+                            placeholder="Add Contacts">
+
+                    </md-contact-chips>
+
+                </md-content>
+            </div>
+
+            <md-button style="float: left" ng-click="ctrl.addContact()" class="md-raised" aria-label="Add">
+                Add
+            </md-button>
+
+            <div style="float: right; width: 100%; text-align: right">
+                <div>Welcome {{ data.currentUser.name}} </div>
+                <md-button ng-click="ul.logout(); ctrl.destroySocket()" class="md-raised" aria-label="Add">
+                    Logout
+                </md-button>
+            </div>
+
+        </div>
+
+    </md-toolbar>
+
+    <!-- END Top menu bar, where search people is  -->
+
+    <!-- START Bar where selected contact is showed  -->
+
+    <div  style="padding-top:10px; padding-bottom: 10px; padding-right: 20px; padding-left: 20px;" >
+
+        <div ng-show="(data.currentUser.conversations.length !== 0)" id="selectedContactBar" >
+
+            <img ng-show="!ul.selected.isgroup" src="{{ul.selected.requestby == data.currentUser._id ? ul.selected.image : ul.selected.imagereq}}" class="avatar"/>
+            <span>{{ul.selected.requestby == data.currentUser._id ? ul.selected.name : ul.selected.namereq}}</span>
+
+            <img  ng-show="ul.selected.isgroup" src="{{ul.selected.image}}" class="avatar"/>
+            <span ng-show="ul.selected.isgroup">{{ul.selected.name}}</span>
+
+            <span style="width: 400px" ng-show="ul.selected.isgroup" class='memberslist'>
+                {{ul.selected.membersname}}</span>
+
+        <div ng-show="ul.selected.confirmed" style="float: right" ng-controller="AddContactCtrl as ctr" layout="column" ng-cloak>
+
+            <md-content style="background-color: inherit; color: #000000;" class="md-chips autocomplete" layout="column">
+
+                <md-contact-chips
+
+                        ng-model="ctr.asyncContacts"
+                        md-contacts="ctr.querySearch($query)"
+                        md-contact-name="name"
+                        md-contact-image="image"
+                        md-require-match="true"
+                        md-highlight-flags="i"
+                        md-max-chips="1"
+                        filter-selected="ctr.filterSelected"
+                        placeholder="Add Contacts">
+
+                </md-contact-chips>
+
+            </md-content>
+
+            <button ng-click="ctr.addContact()">Add</button>
+        </div>
+
+        </div>
+
+        <div ng-show="(data.currentUser.conversations.length == 0)" id="noContactMsg">No Contacts Added Yet</div>
+
+    </div>
+
+    <!-- END Bar where selected contact is showed  -->
+
+    <div flex id="content" style="background-image: url('/client/app/assets/images/background2.jpg')" layout="column" layout-align="end stretch">
+
+        <md-content scroll-bottom="ul.selected.chats" id="msgsContainer" style=" padding-right: 30px; padding-left: 30px; vertical-align: bottom">
+
+            <!-- START Directive of messages  -->
+
+            <div id="messageDirect" message-directive=""></div>
+
+            <!-- END Directive of messages  -->
+
+            <!-- START Repeat of messages  -->
+
+            <div ng-repeat="i in ul.selected.chats" >
+
+                <div layout="row" ng-class="(i[0] == data.currentUser.name) ? 'rightmsg' : 'leftmsg'">
+
+                    <div ng-class="(i[0] == data.currentUser.name ? 'me-singlemsg' : 'other-singlemsg')">
+                        <div style="font-size: 13px; font-weight: bold" ng-class="smallName" ng-show="i[0] !== data.currentUser.name">{{i[0]}}</div>
+                        <span>{{ i[1]}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- END Repeat of messages  -->
+
+        </md-content>
+    </div>
+
+    <div id="footer" ng-hide="!ul.selected.confirmed" ng-controller="messageTextBoxCtrl" style="background-color: lightgrey; padding : 15px 10px 15px 10px;" >
+        <div id="textareaChat"  class="input-container" style="color: dimgray"  >
+            <input type="textarea" style="border: none; width: 100%" ng-model="data.currentMsg"/></div>
+        <div style="float: left; width: 10%">
+            <md-button ng-click="ul.sendMsg()" ng-disabled="data.currentMsg == ''" style="margin-bottom: 0; margin-top: 0">Send</md-button>
+        </div>
+    </div>
+
+</div>
