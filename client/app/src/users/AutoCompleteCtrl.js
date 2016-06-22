@@ -2,9 +2,9 @@
     //'use strict';
     angular
         .module('users')
-        .controller('ContactChipDemoCtrl', ['userService', 'authenticService', '$scope', '$q', '$timeout', DemoCtrl]);
+        .controller('ContactChipDemoCtrl', ['userService', 'socketio', 'authenticService', '$scope', '$q', '$timeout', DemoCtrl]);
 
-    function DemoCtrl (userService, authenticService, $scope, $q, $timeout, $http) {
+    function DemoCtrl (userService, socketio, authenticService, $scope, $q, $timeout, $http) {
 
         console.log('Im executing AutoCompleteCtrl');
         var self = this;
@@ -17,10 +17,27 @@
         self.querySearch = querySearch;
         self.delayedQuerySearch = delayedQuerySearch;
         self.addContact = addContact;
+        self.destroySocket = destroySocket;
 
         /**
          * Search for contacts; use a random delay to simulate a remote call
-         */
+         **/
+
+        socketio.initsocket();
+
+        function destroySocket(){
+
+            console.log('destroysocket');
+            socketio.emit('forceDisconnect');
+        }
+
+        socketio.on('conversationCreated', function(convObj){
+
+            var currentUser = authenticService.getCurrentUser();
+
+            currentUser.conversations.push(convObj);
+
+        });
 
         function addContact(){
 
@@ -45,7 +62,6 @@
 
                 };
 
-                console.log(newContact);
 
                 authenticService.createConversation.post(newContact, function(res, headers){
 
@@ -56,6 +72,14 @@
                     $scope.data.currentUser.conversations.push(contact);
                     authenticService.setCurrentUser($scope.data.currentUser);
                     authenticService.getcurrentforGroupContacts().push(contact);
+
+                    var infoConv = {
+
+                        ids : [selectedContact._id, currentUser._id],
+                        convObj : contact,
+                        convId : contact._id
+                    };
+                    socketio.emit("newConvCreated", infoConv);
 
                     self.asyncContacts = [];// clean search contacts after one is added
 
@@ -134,14 +158,14 @@
                 authenticService.setAllContacts(res.users);
                 var contacts = authenticService.getAllContacts();
 
-        console.log(contacts);
+                //console.log(contacts);
                 contacts.map(function (c, index){
 
-
                     c._lowername = c.name.toLowerCase();
-                    //c.image = "https://s3-us-west-1.amazonaws.com/chatcontacts/" + c.image;
+
 
                     return c;
+
                 });
 
                 self.allContacts = contacts;

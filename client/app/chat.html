@@ -33,6 +33,12 @@
                         <p ng-show="it.isgroup" class='memberslist'>
                            {{it.membersname}}
                         </p>
+
+                        <md-button ng-show="!it.confirmed && it.requestby == data.currentUser._id" class="requestSent">Request Sent</md-button>
+                        <md-button ng-click="ul.userAccepted(it)" ng-show="!it.confirmed && it.requestby !== data.currentUser._id" class="btnAccept">accept</md-button>
+                        <md-button ng-show="!it.isgroup && it.confirmed" class="btnDelete" >delete</md-button>
+                        <md-button ng-show="!it.isgroup && !it.confirmed" class="btnDelete" >delete request</md-button>
+                        <md-button ng-show="it.isgroup" class="btnDelete">delete/leave</md-button>
                     </div>
 
             </md-list-item>
@@ -84,7 +90,7 @@
 
             <div style="float: right; width: 100%; text-align: right">
                 <div>Welcome {{ data.currentUser.name}} </div>
-                <md-button ng-click="ul.logout()" class="md-raised" aria-label="Add">
+                <md-button ng-click="ul.logout(); ctrl.destroySocket()" class="md-raised" aria-label="Add">
                     Logout
                 </md-button>
             </div>
@@ -110,7 +116,7 @@
             <span style="width: 400px" ng-show="ul.selected.isgroup" class='memberslist'>
                 {{ul.selected.membersname}}</span>
 
-        <div style="float: right" ng-controller="AddContactCtrl as ctr" layout="column" ng-cloak>
+        <div ng-show="ul.selected.confirmed" style="float: right" ng-controller="AddContactCtrl as ctr" layout="column" ng-cloak>
 
             <md-content style="background-color: inherit; color: #000000;" class="md-chips autocomplete" layout="column">
 
@@ -129,6 +135,7 @@
                 </md-contact-chips>
 
             </md-content>
+
             <button ng-click="ctr.addContact()">Add</button>
         </div>
 
@@ -138,13 +145,11 @@
 
     </div>
 
-
-
     <!-- END Bar where selected contact is showed  -->
 
     <div flex id="content" style="background-image: url('/client/app/assets/images/background2.jpg')" layout="column" layout-align="end stretch">
 
-        <md-content id="msgsContainer" style=" padding-right: 30px; padding-left: 30px">
+        <md-content scroll-bottom="ul.selected.chats" id="msgsContainer" style=" padding-right: 30px; padding-left: 30px; vertical-align: bottom">
 
             <!-- START Directive of messages  -->
 
@@ -169,13 +174,13 @@
             <!-- END Repeat of messages  -->
 
         </md-content>
-
     </div>
 
-    <div id="footer" style="background-color: lightgrey; padding : 15px 10px 15px 10px;" >
-        <div id="textareaChat" class="input-container" contenteditable="true" ></div>
+    <div id="footer" ng-hide="!ul.selected.confirmed" ng-controller="messageTextBoxCtrl" style="background-color: lightgrey; padding : 15px 10px 15px 10px;" >
+        <div id="textareaChat"  class="input-container" style="color: dimgray"  >
+            <input type="textarea" style="border: none; width: 100%" ng-model="data.currentMsg"/></div>
         <div style="float: left; width: 10%">
-            <md-button ng-click="ul.printMet()" style="margin-bottom: 0; margin-top: 0">Send</md-button>
+            <md-button ng-click="ul.sendMsg()" ng-disabled="data.currentMsg == ''" style="margin-bottom: 0; margin-top: 0">Send</md-button>
         </div>
     </div>
 

@@ -2,9 +2,9 @@
     //'use strict';
     angular
         .module('users')
-        .controller('AddContactCtrl', ['userService', 'authenticService', '$scope', '$q', '$timeout', DemoCtrl]);
+        .controller('AddContactCtrl', ['userService', 'socketio', 'authenticService', '$scope', '$q', '$timeout', DemoCtrl]);
 
-    function DemoCtrl (userService, authenticService, $scope, $q, $timeout, $http) {
+    function DemoCtrl (userService, socketio, authenticService, $scope, $q, $timeout, $http) {
 
         console.log('Controller Contact');
         var self = this;
@@ -20,14 +20,76 @@
         /**
          * Search for contacts; use a random delay to simulate a remote call
          **/
+        socketio.on('connect', function(){
+
+            console.log('Im connected');
+            socketio.emit('registerUser',  $scope.data.currentUser._id);
+        });
+
+        socketio.on('disconnect', function(){
+
+            console.log('socket disconnect');
+
+        });
+
+        socketio.on('newConvAdded', function(infoContact){
+
+            //add new conv to conversation list
+            console.log('new user added to conversation');
+            var currentUser = authenticService.getCurrentUser();
+            var index = currentUser.conversations.map(function(e)
+            { return e._id; }).indexOf(infoContact.conv);
+
+            currentUser.conversations[index].membersname = infoContact.membersname;
+        });
+
+        socketio.on('userAddedToGroup', function(data){
+
+           console.log('I was added to a group');
+            console.log(data);
+            var currentUser = authenticService.getCurrentUser();
+            currentUser.conversations.push(data);
+
+        });
+
+        socketio.on('groupCreated', function(convObj){
+
+            var currentUser = authenticService.getCurrentUser();
+            currentUser.conversations.push(convObj);
+
+        });
+
+        socketio.on('convAccepted', function(convId){
+
+            var currentUser = authenticService.getCurrentUser();
+            var index = currentUser.conversations.map(function(e)
+            { return e._id; }).indexOf(convId);
+
+            currentUser.conversations[index].confirmed = true;
+
+        });
+
+        socketio.on('messageReceived', function(chatObj){
+
+            console.log(chatObj);
+
+            // validate if this is same msg I emit to avoid adding it
+            var currentUser = authenticService.getCurrentUser();
+
+            var index = currentUser.conversations.map(function(e)
+            { return e._id; }).indexOf(chatObj.id);
+
+            currentUser.conversations[index].chats.push(chatObj.chat);
+
+
+        });
 
         function addContact(){
-
 
             var converUser = $scope.data.selectedUser; //contact or group currently active
             var currentUser = authenticService.getCurrentUser(); // user with session active
 
-            console.log(converUser);
+            //console.log(converUser);
             if(self.asyncContacts.length == 1 && !converUser.isgroup){
 
                 var selectedContact = self.asyncContacts[0]; // contact selected in search box
@@ -83,6 +145,14 @@
                         authenticService.setCurrentUser($scope.data.currentUser);
 
                         //apply filter
+                        var infoGroup = {
+
+                            convId : contact._id,
+                            convObj : contact,
+                            ids : [currentUser._id, converUser.idi, selectedContact.idi]
+                        };
+
+                        socketio.emit('newGroupCreated', infoGroup);
 
                         self.asyncContacts = []; // clean search contacts after one is added
 
@@ -127,8 +197,16 @@
                         var index = currentGroupContacts.map(function(e) { return e._id; }).indexOf(selectedContact._id);
 
                         currentGroupContacts.splice(index, 1);
+
+                        infoContact.conversation = converUser;
+                        socketio.emit('userAddedToConv', infoContact);
                     }
                     // remove contacted added to list group contact
+
+
+                    var room = "a123"; // replace for id of the conversation
+                    console.log('message text');
+
 
                     self.asyncContacts = [];
 
@@ -171,8 +249,13 @@
             var contacts = authenticService.getCurrentUser();
 
             contacts = contacts.conversations;
+            conversationsids = [];
+
+
 
             contacts.map(function (c, index){
+
+                conversationsids.push(c._id);
 
                 if(!c.isgroup){
                     var currentUser = authenticService.getCurrentUser(); // user with session active
@@ -194,8 +277,8 @@
                 return c;
             });
 
-            console.log('load all contacts');
-            console.log(contacts);
+            socketio.emit("createRooms", conversationsids);
+
             authenticService.setcurrentforGroupContactsStatic(contacts);
 
             return contacts;

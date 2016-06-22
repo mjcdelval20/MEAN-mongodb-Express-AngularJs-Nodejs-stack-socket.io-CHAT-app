@@ -8,12 +8,139 @@ var express = require('express'),
     Conversation = require('./app/models/conversations'),
     config = require('./config/database'),
     port = process.env.PORT || 3000,
-    jwt = require('jwt-simple');
+    jwt = require('jwt-simple'),
+    cors = require('cors');
 
 
 //var User = mongoose.model('myuser', userSchema);
 
 var app = express();
+
+app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+
+app.use(express.static(__dirname + './public'));
+
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+http.listen(8080, "127.0.0.1");
+
+var users = {};
+
+io.on('connection', function(socket){
+
+   console.log("A user is connected");
+
+    socket.on('registerUser', function(user){
+
+        users[user] = socket.id;
+
+        console.log(users);
+    });
+
+    socket.on('newConvCreated', function(infoConv){
+
+        var room = infoConv.convId;
+
+        for(var i=0; i < infoConv.ids.length; i++){
+
+            if(io.sockets.connected[users[infoConv.ids[i]]] !== undefined){
+
+                io.sockets.connected[users[infoConv.ids[i]]].join(room);
+            }
+        }
+
+        socket.broadcast.to(room).emit("conversationCreated", infoConv.convObj);
+    });
+
+    socket.on('newGroupCreated', function(infoGroup){
+
+        var room = infoGroup.convId;
+
+        for (var i=0; i< infoGroup.ids.length; i++){ // Adding 3 users that will be in recently created group
+
+            if(io.sockets.connected[users[infoGroup.ids[i]]] !== undefined) {
+
+                io.sockets.connected[users[infoGroup.ids[i]]].join(room);
+            }
+        }
+
+        socket.broadcast.to(room).emit("groupCreated", infoGroup.convObj);
+
+    });
+
+    socket.on('userAddedToConv', function(infoContact){
+
+        console.log(infoContact);
+        console.log("All Rooms");
+        console.log(io.sockets.adapter.rooms); // Log all rooms
+
+        var room = infoContact.conv;
+
+        if(users[infoContact.ids[0]] !== undefined) { //Checks is the user we're adding to the group has a registered socket id
+            io.sockets.connected[users[infoContact.ids[0]]].join(room);// Join user to group room
+            io.to(users[infoContact.ids[0]]).emit('userAddedToGroup', infoContact.conversation);// Notify by adding the group to the conversations list of recently added user
+        }
+
+        socket.broadcast.to(room).emit('newConvAdded', infoContact);
+
+    });
+
+    socket.on('createRooms', function(rooms){
+
+        var namespace = '/';
+        console.log('create rooms executed');
+        for (var i=0; i < rooms.length; i++){
+
+         socket.join(rooms[i]);
+
+            //console.log(io.nsps[namespace].adapter.rooms[rooms[i]]);
+
+        }
+
+        //socket.join('575b15fbe772393a651fee01');
+
+        //console.log('printing :');
+
+        //var roomName = '575b15fbe772393a651fee01';
+
+        //for (var socketId in io.nsps[namespace].adapter.rooms[roomName]) {
+        //    console.log(socketId);
+        //}
+    });
+
+    console.log(socket.id);
+    //console.log(io.nsps[namespace].adapter.rooms[roomName]);// Log socket ids in selected room
+
+    //socket.broadcast.to('575b15fbe772393a651fee01').emit('newConvAdded', 'user connected');
+    //socket.broadcast.emit('newConvAdded', 'user connected');
+
+
+
+    socket.on('disconnect', function(){
+
+       console.log('got disconnect');
+    });
+
+    socket.on('forceDisconnect', function(){
+
+        console.log('logging force disconnect');
+       socket.disconnect();
+    });
+
+
+});
+
+io.on('disconnect', function(socket){
+
+    console.log('user disconnected');
+});
+
+
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -25,13 +152,13 @@ app.use(passport.initialize());
 app.use(function(req,res, next){
 
     if(req.method=='OPTIONS'){
-        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Origin", "http://localhost:63342");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
         res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
 
         res.status(204).end();
     }else{
-        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Origin", "http://localhost:63342");
         next();
     }
     //res.header("Access-Control-Allow-Origin", "*");
@@ -41,6 +168,8 @@ app.use(function(req,res, next){
     //next();
 
 });
+
+
 
 app.get('/', function(req, res) {
 
@@ -127,9 +256,6 @@ apiRoutes.post('/authenticate', function(req, res){
 
 apiRoutes.get('/getallcontacts/:id' ,function(req, res){
 
-    console.log('print params');
-    console.log(req.params.id);
-
     User.find({ _id : {$ne: req.params.id }}, 'name image', function(err, users){
 
         if(err) throw err;
@@ -189,6 +315,10 @@ apiRoutes.post('/createconv', function(req, res){
                     }
                     else {
                         console.log(user);
+                        console.log('previous the emit socket');
+
+                        //io.emit('message', conv);
+
                         res.json({success: true, msg: 'Successful created new conversation.', conv: conv});
                     }
                 }
@@ -210,7 +340,6 @@ apiRoutes.post('/addtoconv', function(req, res){
 
         function(err, user){
 
-
             if(err) { return console.log(err)}
 
             else if (user.nModified !== 0){
@@ -224,8 +353,9 @@ apiRoutes.post('/addtoconv', function(req, res){
                     },
                     function(){
 
+                        //io.sockets.in(req.body.conv).emit('addConv', 'I'm in add conv api');
+                        //io.sockets.in('foobar').emit('message', 'you should not see this');
                         res.json({success: true, msg: 'Successful added conversation'});
-
                     }
                 );
             }
@@ -234,12 +364,64 @@ apiRoutes.post('/addtoconv', function(req, res){
             }
         }
     )
+});
 
+apiRoutes.post('/acceptconv', function(req, res){
+
+    Conversation.update(
+
+        {_id: req.body._id},
+        {
+            $set : {"confirmed" : true}
+        },
+        function(err, conv){
+
+            if(err){ return console.log(err)}
+
+            if(conv.nModified !==0){ // check if a Doc was updated
+
+                if(users[req.body.sendnotice] !== undefined ){
+
+                    io.to(users[req.body.sendnotice]).emit('convAccepted', req.body._id);//
+                    res.json({ success : true});
+
+                }
+            }else { res.json({ success : false});}
+        }
+
+    )
+});
+
+apiRoutes.post('/sendmessage', function(req, res){
+
+    console.log("I got a request");
+    console.log(req.body);
+
+    Conversation.update(
+
+        {_id : req.body._id},
+        {
+            $push : {"chats" : req.body.chat}
+        },
+        function(err, conv){
+
+            console.log(conv);
+
+            if(err) { return console.log(err)}
+
+            if(conv.nModified !==0){
+
+                    var chatObj = { id : req.body._id, chat : req.body.chat};
+                    io.to(req.body._id).emit('messageReceived', chatObj)
+
+                res.json({success : true});
+
+            }else { res.json({success : false})}
+        }
+    )
 });
 // connect the api routes under /api/*
 app.use('/api', apiRoutes);
-
-
 
 app.listen(port, function(){
 

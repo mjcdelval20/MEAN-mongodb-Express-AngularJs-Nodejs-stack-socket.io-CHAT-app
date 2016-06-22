@@ -32,6 +32,19 @@
                     }
 
                 }),
+                acceptConv : $resource('http://localhost:3000/api/acceptconv',{}, {
+                    'save': {
+                        method: 'POST'
+                    }
+
+                }),
+                sendMsg : $resource('http://localhost:3000/api/sendmessage', {}, {
+
+                    'save': {
+
+                        method : 'POST'
+                    }
+                }),
 
                 getCurrentUser : function(){ return currentUser},
                 setCurrentUser :  function(user){ currentUser = user; },

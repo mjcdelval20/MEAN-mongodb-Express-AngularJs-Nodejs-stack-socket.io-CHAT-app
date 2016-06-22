@@ -17,8 +17,9 @@
     "mongoskin": "1.4.1"
   },
   "devDependencies": {
+    "expect.js": "0.2.0",
     "mocha": "1.16.2",
-    "superagent": "0.15.7",
-    "expect.js": "0.2.0"
+    "socket.io": "^1.4.6",
+    "superagent": "0.15.7"
   }
 }

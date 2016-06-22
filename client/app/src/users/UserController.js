@@ -16,6 +16,7 @@
    * @constructor
    */
   function UserController( userService, authenticService, amazonurl, $scope, $mdSidenav, $mdBottomSheet, $log, $state, $http) {
+
     var self = this;
 
     self.selected     = null;
@@ -24,11 +25,12 @@
     self.toggleList   = toggleUsersList;
     self.makeContact  = makeContact;
     //self.converSelctUser = userService.converSelecUser();
-    self.printMet = function(){ console.log('qsqws');};
+    self.sendMsg = sendMsg;
     self.register = register;
     self.login = login;
     self.logout = logout;
     self.url = amazonurl.url;
+    self.userAccepted = userAccepted;
 
 
       var isAuthenticated = false;
@@ -40,11 +42,68 @@
       $scope.data = {
 
           login : { error: false},
-          register: { error: false}
+          register: { error: false},
+          currentMsg : ""
 
       };
 
+      function userAccepted(conv){
 
+          //console.log(user);
+          if(conv.gotrequest == authenticService.getCurrentUser()._id){
+              conv.sendnotice = conv.requestby;
+
+          }else{
+              conv.sendnotice = conv.gotrequest;
+          }
+          authenticService.acceptConv.save(conv, function(res, headers){
+
+
+
+                if(res.success){
+
+                    var currentUser = authenticService.getCurrentUser();
+                    var index = currentUser.conversations.map(function(e)
+                    { return e._id; }).indexOf(conv._id);
+
+
+                    currentUser.conversations[index].confirmed = true;
+                }
+          })
+      }
+
+      function sendMsg(){
+
+          var conv = self.selected;
+          var sendchatto;
+
+          if(conv.gotrequest == authenticService.getCurrentUser()._id){
+              sendchatto = conv.requestby;
+
+          }else{
+              sendchatto = conv.gotrequest;
+          }
+
+          var chat = [$scope.data.currentUser.name, $scope.data.currentMsg];
+          //self.selected.chats.push(chat); // Add to current selected conversations
+
+          $scope.data.currentMsg = ""; //clean message area
+
+          //add method to update in database and sockets (call back add in current logged User data)
+          var chatObj = {
+                 _id : self.selected._id,
+                chat : chat,
+          sendchatto : sendchatto };
+
+          authenticService.sendMsg.save(chatObj, function (res, header){
+
+              if(res.success){
+
+                    return console.log("success message sent");
+              }
+          });
+
+      }
 
       function loadUserCredentials(){
 
