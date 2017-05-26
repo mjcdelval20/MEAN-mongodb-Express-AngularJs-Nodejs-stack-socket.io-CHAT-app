@@ -2,7 +2,6 @@
 Chat application using angular.js , node.js, mongoose, socket.io
 ---
 title: MEAN stack and socket.io prototype
-
 description: Chat application with several features
 author: Erick Resendiz
 tags: AngularJS, Node, MongoDb, Express, socket.io, Authentication, JWT, Passport, bycript
