@@ -17,7 +17,7 @@ Solarized
 ## Precision colors for machines and people
 
 [![solarized dualmode](https://github.com/altercation/solarized/raw/master/img/solarized-yinyang.png)](#features)
-![Alt text](/relative/path/master/images/1.png?raw=true "Optional Title")
+![Alt text](/master/images/1.png?raw=true "Optional Title")
 
 Solarized is a sixteen color palette (eight monotones, eight accent colors)
 designed for use with terminal and gui applications. It has several [unique
