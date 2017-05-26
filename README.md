@@ -1,22 +1,18 @@
 # MEAN-mongodb-Express-AngularJs-Nodejs-stack-socket.io-CHAT-app
 Chat application using angular.js , node.js, mongoose, socket.io
 ---
-title: Solarized
-description: Precision colors for machines and people
-author: Ethan Schoonover
-tags: test, testing, test123
-colors: light yellow
-created:  2011 Mar 15
-modified: 2011 Apr 16
+title: MEAN stack and socket.io prototype
+description: Chat application with several features
+author: Erick Resendiz
+tags: AngularJS, Node, MongoDb, Express, socket.io, Authentication, JWT, Passport, bycript
 
 ---
 
-Solarized
+Login/Register
 =========
 
 ## Precision colors for machines and people
 
-[![solarized dualmode](https://github.com/altercation/solarized/raw/master/img/solarized-yinyang.png)](#features)
 ![Alt text](/images/1.png?raw=true "Optional Title")
 
 Solarized is a sixteen color palette (eight monotones, eight accent colors)
