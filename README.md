@@ -15,60 +15,63 @@ Login/Register
 
 ![Alt text](/images/1.png?raw=true "Optional Title")
 
-Login/Register
+Internationalization
 =========
 
-## Precision colors for machines and people
+## Supports English and Spanish languages
 
 ![Alt text](/images/2.png?raw=true "Optional Title")
 
-Login/Register
+Login/Registered page in Spanish
 =========
 
-## Precision colors for machines and people
+## Text and labels updated to selected language
 
 ![Alt text](/images/3.png?raw=true "Optional Title")
 
-Login/Register
+Password validation
 =========
 
-## Precision colors for machines and people
+## Password is saved on mongodb encrypted using bcrypt library
 
 ![Alt text](/images/4.png?raw=true "Optional Title")
-Login/Register
+
+Sing Up Validation
 =========
 
-## Precision colors for machines and people
+## Form input validation client side and verification for existing username/email server side
 
 ![Alt text](/images/5.png?raw=true "Optional Title")
 
-Login/Register
+Chat View
 =========
 
-## Precision colors for machines and people
+## UI for chat and visualization of contact list
 
 ![Alt text](/images/6.png?raw=true "Optional Title")
-Login/Register
+
+Contact Search
 =========
 
-## Precision colors for machines and people
+## Asynchronus search that search for registered contacts
 
 ![Alt text](/images/7.png?raw=true "Optional Title")
 
-Login/Register
+Contact List
 =========
 
-## Precision colors for machines and people
+## List of contacts showing request status and delete request button
 
 ![Alt text](/images/8.png?raw=true "Optional Title")
-Login/Register
+
+Contact pending to be accedpted
 =========
 
-## Precision colors for machines and people
+## View of contact who got request
 
 ![Alt text](/images/9.png?raw=true "Optional Title")
 
-Login/Register
+Contact Accepdted, UI enabled
 =========
 
 ## Precision colors for machines and people
