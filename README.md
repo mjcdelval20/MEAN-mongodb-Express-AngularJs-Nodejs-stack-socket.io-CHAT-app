@@ -15,38 +15,33 @@ Login/Register
 
 Internationalization
 =========
-
 ## Supports English and Spanish languages
-
 ![Alt text](/images/2.png?raw=true "Optional Title")
+<br />
 
 Login/Registered page in Spanish
 =========
-
 ## Text and labels updated to selected language
-
 ![Alt text](/images/3.png?raw=true "Optional Title")
+<br />
 
 Password validation
 =========
-
 ## Password is saved on mongodb encrypted using bcrypt library
-
 ![Alt text](/images/4.png?raw=true "Optional Title")
+
 
 Sing Up Validation
 =========
-
 ## Form input validation client side and verification for existing username/email server side
-
 ![Alt text](/images/5.png?raw=true "Optional Title")
+
 
 Chat View
 =========
-
 ## UI for chat and visualization of contact list
-
 ![Alt text](/images/6.png?raw=true "Optional Title")
+
 
 Contact Search
 =========
