@@ -21,12 +21,9 @@ Internationalization
 ![Alt text](/images/2.png?raw=true "Optional Title")
 <br />
 <br />
-
-
-Login/Registered page in Spanish
-=========
 ## Text and labels updated to selected language
 ![Alt text](/images/3.png?raw=true "Optional Title")
+<br />
 <br />
 
 Password validation
