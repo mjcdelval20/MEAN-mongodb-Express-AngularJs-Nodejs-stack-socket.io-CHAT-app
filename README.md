@@ -17,11 +17,11 @@ Login/Register
 
 Internationalization
 =========
-## Supports English and Spanish languages
+## -Supports English and Spanish languages
 ![Alt text](/images/2.png?raw=true "Optional Title")
 <br />
 <br />
-## Text and labels updated to selected language
+## -Text and labels updated to selected language
 ![Alt text](/images/3.png?raw=true "Optional Title")
 <br />
 <br />
