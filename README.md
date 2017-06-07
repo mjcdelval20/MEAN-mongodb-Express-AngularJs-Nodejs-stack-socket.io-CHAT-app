@@ -11,6 +11,8 @@ tags: AngularJS, Node, MongoDb, Express, socket.io, Authentication, JWT, Passpor
 Login/Register
 =========
 ![Alt text](/images/1.png?raw=true "Optional Title")
+<br />
+<br />
 
 
 Internationalization
@@ -18,6 +20,8 @@ Internationalization
 ## Supports English and Spanish languages
 ![Alt text](/images/2.png?raw=true "Optional Title")
 <br />
+<br />
+
 
 Login/Registered page in Spanish
 =========
