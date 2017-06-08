@@ -79,45 +79,36 @@ Contact pending to be accedpted
 
 Contact Accepted, UI enabled
 =========
-## Precision colors for machines and people
+## Textbox and send button are now enable, offline status changed to green online
 ![Alt text](/images/10.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
-=========
-## Precision colors for machines and people
-![Alt text](/images/11.png?raw=true "Optional Title")
-<br />
-<br />
 
-
-Login/Register
+Search for confirmed contact in current conversation to create group
 =========
-## Precision colors for machines and people
+## Create a group (3 or more people) to chat with, by searching for confirmed contacts to add.
 ![Alt text](/images/12.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+Group window conversation is now created
 =========
-## Precision colors for machines and people
+## A seperated group conversation is created for chatting with added people
 ![Alt text](/images/13.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
-=========
-## Precision colors for machines and people
+Initiate chat with group
 ![Alt text](/images/14.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+View of how you get messages comming from other contacts
 =========
 ## Precision colors for machines and people
 ![Alt text](/images/15.png?raw=true "Optional Title")
@@ -125,39 +116,36 @@ Login/Register
 <br />
 
 
-Login/Register
+View of how other people messages and my messages looks
 =========
-## Precision colors for machines and people
 ![Alt text](/images/16.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+Make use of drawing took
 =========
-## Precision colors for machines and people
+## Create draws to send your contacts, with a paint like tool (erase and swith to text buttons are showed in the left)
 ![Alt text](/images/17.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+View of chat once you sent draw
 =========
-## Precision colors for machines and people
 ![Alt text](/images/18.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+View of draw received by contacts
 =========
-## Precision colors for machines and people
 ![Alt text](/images/19.png?raw=true "Optional Title")
 <br />
 <br />
 
 
-Login/Register
+Images using 64base format saved on data base mongodb
 =========
 ## Precision colors for machines and people
 ![Alt text](/images/20.png?raw=true "Optional Title")
