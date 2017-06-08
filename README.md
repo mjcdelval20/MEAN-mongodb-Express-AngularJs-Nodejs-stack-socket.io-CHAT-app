@@ -136,3 +136,10 @@ Images using 64base format saved on data base mongodb
 ![Alt text](/images/20.png?raw=true "Optional Title")
 <br />
 <br />
+
+View of mongodb showing users collection
+=========
+## Documents of Users collection are showed, password for each user was encrypted using bcrypt in the middleware
+![Alt text](/images/20.png?raw=true "Optional Title")
+<br />
+<br />
