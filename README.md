@@ -102,20 +102,6 @@ Group window conversation is now created
 <br />
 
 
-Initiate chat with group
-![Alt text](/images/14.png?raw=true "Optional Title")
-<br />
-<br />
-
-
-View of how you get messages comming from other contacts
-=========
-## Precision colors for machines and people
-![Alt text](/images/15.png?raw=true "Optional Title")
-<br />
-<br />
-
-
 View of how other people messages and my messages looks
 =========
 ![Alt text](/images/16.png?raw=true "Optional Title")
@@ -123,9 +109,9 @@ View of how other people messages and my messages looks
 <br />
 
 
-Make use of drawing took
+Make use of drawing tool
 =========
-## Create draws to send your contacts, with a paint like tool (erase and swith to text buttons are showed in the left)
+## Create draws to send your contacts, with a paint like tool (erase and switch to text buttons are showed in the left)
 ![Alt text](/images/17.png?raw=true "Optional Title")
 <br />
 <br />
@@ -147,7 +133,6 @@ View of draw received by contacts
 
 Images using 64base format saved on data base mongodb
 =========
-## Precision colors for machines and people
 ![Alt text](/images/20.png?raw=true "Optional Title")
 <br />
 <br />
