@@ -39,7 +39,7 @@ Password validation
 
 Sing Up Validation
 =========
-## Form input validation client side and verification for existing username/email server side
+## Form input validation client side and server side, verification for existing username/email
 ![Alt text](/images/5.png?raw=true "Optional Title")
 <br />
 <br />
@@ -55,7 +55,7 @@ Chat View
 
 Contact Search
 =========
-## Asynchronus search that looks for registered contacts
+## Asynchronus search that looks for registered people
 ![Alt text](/images/7.png?raw=true "Optional Title")
 <br />
 <br />
@@ -69,7 +69,7 @@ Contact List
 <br />
 
 
-Contact pending to be accedpted
+Contact pending to be accepted
 =========
 ## View of contact who got request
 ![Alt text](/images/9.png?raw=true "Optional Title")
@@ -79,7 +79,7 @@ Contact pending to be accedpted
 
 Contact Accepted, UI enabled
 =========
-## Textbox and send button are now enable, offline status changed to green online
+## Textbox and send button are now enabled, offline status changed to green online
 ![Alt text](/images/10.png?raw=true "Optional Title")
 <br />
 <br />
@@ -96,7 +96,7 @@ Search for confirmed contact in current conversation to create group
 
 Group window conversation is now created
 =========
-## A seperated group conversation is created for chatting with added people
+## A seperated group conversation is created for chatting with added contacts
 ![Alt text](/images/13.png?raw=true "Optional Title")
 <br />
 <br />
